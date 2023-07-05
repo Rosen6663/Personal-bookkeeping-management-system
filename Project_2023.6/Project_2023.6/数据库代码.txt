@@ -1,0 +1,88 @@
+create database project;
+use project;
+create table user(
+uuserid char(20) primary key ,
+upassword char(20),
+uname char(20),
+usex char(2) check ( usex in('男','女') ),
+realnaem char(6),
+ createtime date
+);
+
+create table account(
+uuserid char(20) ,
+accounttype int ,
+accountname char(20) ,
+money double,
+lilv double,
+createdate date,
+lilvstart date,
+primary key(uuserid,accountname)
+);
+create table shourukemu(
+uuserid char(20)  ,
+bigkemu char(20),
+primary key(uuserid,bigkemu)
+);
+create table shouruzikemu(
+    uuserid char(20)  ,
+    bigkemu char(20),
+    zikemu char(20),
+    primary key (uuserid,bigkemu,zikemu),
+    foreign key (uuserid,bigkemu)references shourukemu(uuserid, bigkemu)
+);
+create table zhichukemu(
+uuserid char(20)  ,
+bigkemu char(20),
+primary key (uuserid,bigkemu)
+
+);
+create table zhichuzikemu(
+    uuserid char(20)  ,
+    bigkemu char(20),
+    zikemu char(20),
+    primary key (uuserid,bigkemu,zikemu),
+    foreign key (uuserid,bigkemu) references zhichukemu(uuserid, bigkemu)
+);
+create table outjizhang(
+    uuserid char(20),
+    accountname char(20),
+    bigkemu char(20),
+    zikemu char(20),
+    money double,
+    createdate datetime,
+    beizhu char(20),
+    primary key (uuserid,createdate),
+    foreign key (uuserid,accountname) references account(uuserid, accountname),
+    foreign key(uuserid,bigkemu)references zhichukemu(uuserid, bigkemu),
+    foreign key (uuserid,bigkemu,zikemu)references zhichuzikemu(uuserid, bigkemu, zikemu)
+);
+create table injizhang(
+    uuserid char(20),
+    accountname char(20),
+    bigkemu char(20),
+    zikemu char(20),
+    money double,
+    createdate datetime,
+    beizhu char(20),
+    primary key (uuserid,createdate),
+    foreign key (uuserid,accountname) references account(uuserid, accountname),
+    foreign key(uuserid,bigkemu)references shourukemu(uuserid, bigkemu),
+    foreign key (uuserid,bigkemu,zikemu)references shouruzikemu(uuserid, bigkemu, zikemu)
+);
+create table jinggao(
+    uuserid char(20) ,
+    money double,
+    kaiguang boolean,
+    type int ,
+    primary key (uuserid,type)
+);
+create table zhangdan(
+    uuserid char(20) ,
+    zahndanname char(20) not null,
+    type char(4) check ( type in('收入','支出') ) ,
+    accountname char(20),
+    kemu char(40),
+    money double,
+    createtiem datetime
+);
